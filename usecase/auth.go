@@ -3,15 +3,15 @@ package usecase
 type Login struct{}
 
 type LoginInterface interface {
-	Auth(username, password string) bool
+	Auth(Username, Password string) bool
 }
 
-func TaskLogin() LoginInterface {
+func NewLogin() LoginInterface {
 	return &Login{}
 }
 
-func (pi *Login) Auth(username, password string) bool {
-	if username == "ivialva" && password == "123456" {
+func (pi *Login) Auth(Username, Password string) bool {
+	if Username == "admin" && Password == "admin123" {
 		return true
 	}
 	return false

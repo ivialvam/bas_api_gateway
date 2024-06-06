@@ -1,6 +1,8 @@
 package handler
 
 import (
+	"api_gateway/usecase"
+	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -10,34 +12,33 @@ type AuthInterface interface {
 	AuthLogin(*gin.Context)
 }
 
-type AuthImplement struct{}
+type authImplement struct{}
 
-func Login() AuthInterface {
-	return &AuthImplement{}
+func NewAuth() AuthInterface {
+	return &authImplement{}
 }
 
-type BodyPayLoadAuth struct {
-	Username string `json:"username"`
-	Password string `json:"password"`
+type bodyPayloadAuth struct {
+	Username string
+	Password string
 }
 
-func (a *AuthImplement) AuthLogin(c *gin.Context) {
-	var bodyPayload BodyPayLoadAuth
-
-	err := c.BindJSON(&bodyPayload)
+func (pi *authImplement) AuthLogin(g *gin.Context) {
+	BodyPayLoad := bodyPayloadAuth{}
+	err := g.BindJSON(&BodyPayLoad)
 	if err != nil {
-		c.AbortWithError(http.StatusBadRequest, err)
-		return
+		log.Fatal(err)
 	}
 
-	if bodyPayload.Username == "admin" && bodyPayload.Password == "admin123" {
-		c.JSON(http.StatusOK, gin.H{
-			"message": "Account retrieved successfully",
-			"data":    bodyPayload,
+	if usecase.NewLogin().Auth(BodyPayLoad.Username, BodyPayLoad.Password) {
+		g.JSON(http.StatusOK, gin.H{
+			"message": "Congratss!! Anda berhasil login",
+			"data":    BodyPayLoad,
 		})
 	} else {
-		c.JSON(http.StatusUnauthorized, gin.H{
-			"message": "Unauthorized: Invalid username or password",
+		g.JSON(http.StatusUnauthorized, gin.H{
+			"message": "Maaf!! Anda gagal login :(",
+			"data":    BodyPayLoad,
 		})
 	}
 }
