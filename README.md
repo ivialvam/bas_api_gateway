@@ -20,5 +20,5 @@
 >> output
 ![update pgadmin after](https://github.com/ivialvam/bas_api_gateway/assets/97967090/5a4a1078-f9f3-474f-92ae-0623b32adce5)
 
-- Proses pada terminal
+- Proses pada terminal vscode
 ![proses taskgolang](https://github.com/ivialvam/bas_api_gateway/assets/97967090/8b7db349-d867-4112-b0d4-9d3414ca9c12)
