@@ -4,12 +4,14 @@ import (
 	"api_gateway/model"
 	"api_gateway/utils"
 	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
 )
 
 type TransactionInterface interface {
 	GetTransaction(*gin.Context)
+	Create(*gin.Context)
 }
 type transactionImplement struct{}
 
@@ -22,7 +24,7 @@ func NewTransaction() TransactionInterface {
 	return &transactionImplement{}
 }
 
-func (pi *transactionImplement) TableName(g *gin.Context) {
+func (pi *transactionImplement) Create(g *gin.Context) {
 	BodyPayLoad := model.Transaction{}
 
 	err := g.BindJSON(&BodyPayLoad)
@@ -30,6 +32,9 @@ func (pi *transactionImplement) TableName(g *gin.Context) {
 		g.AbortWithStatusJSON(http.StatusBadRequest, err)
 		return
 	}
+
+	timeNow := time.Now()
+	BodyPayLoad.Transaction_date = &timeNow
 
 	orm := utils.NewDatabase().Orm
 	db, _ := orm.DB()
